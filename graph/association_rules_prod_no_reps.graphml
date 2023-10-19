@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_label" for="node" attr.name="label" attr.type="string"/>
+  <key id="v_index" for="node" attr.name="index" attr.type="double"/>
+  <key id="v_type" for="node" attr.name="type" attr.type="double"/>
+  <key id="v_support" for="node" attr.name="support" attr.type="double"/>
+  <key id="v_confidence" for="node" attr.name="confidence" attr.type="double"/>
+  <key id="v_coverage" for="node" attr.name="coverage" attr.type="double"/>
+  <key id="v_lift" for="node" attr.name="lift" attr.type="double"/>
+  <key id="v_count" for="node" attr.name="count" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="n0">
+      <data key="v_name">662</data>
+      <data key="v_label">BACK DOOR</data>
+      <data key="v_index">662</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">4378</data>
+      <data key="v_label">KEY FOB</data>
+      <data key="v_index">4378</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">6129</data>
+      <data key="v_label">PINK REGENCY TEACUP AND SAUCER</data>
+      <data key="v_index">6129</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">6964</data>
+      <data key="v_label">REGENCY CAKESTAND 3 TIER</data>
+      <data key="v_index">6964</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">6969</data>
+      <data key="v_label">REGENCY TEA PLATE GREEN</data>
+      <data key="v_index">6969</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n5">
+      <data key="v_name">6970</data>
+      <data key="v_label">REGENCY TEA PLATE PINK</data>
+      <data key="v_index">6970</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n6">
+      <data key="v_name">6971</data>
+      <data key="v_label">REGENCY TEA PLATE ROSES</data>
+      <data key="v_index">6971</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n7">
+      <data key="v_name">7274</data>
+      <data key="v_label">ROSES REGENCY TEACUP AND SAUCER</data>
+      <data key="v_index">7274</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n8">
+      <data key="v_name">7612</data>
+      <data key="v_label">SHED</data>
+      <data key="v_index">7612</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n9">
+      <data key="v_name">assoc1</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">1</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0105789294899791</data>
+      <data key="v_confidence">0.897119341563786</data>
+      <data key="v_coverage">0.0117921094773621</data>
+      <data key="v_lift">60.6129123659178</data>
+      <data key="v_count">218</data>
+    </node>
+    <node id="n10">
+      <data key="v_name">assoc2</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">2</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0103362934925025</data>
+      <data key="v_confidence">0.876543209876543</data>
+      <data key="v_coverage">0.0117921094773621</data>
+      <data key="v_lift">50.3145568967296</data>
+      <data key="v_count">213</data>
+    </node>
+    <node id="n11">
+      <data key="v_name">assoc3</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">3</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0119862182753433</data>
+      <data key="v_confidence">1</data>
+      <data key="v_coverage">0.0119862182753433</data>
+      <data key="v_lift">49.5360576923077</data>
+      <data key="v_count">247</data>
+    </node>
+    <node id="n12">
+      <data key="v_name">assoc4</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">4</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0140243606541466</data>
+      <data key="v_confidence">1</data>
+      <data key="v_coverage">0.0140243606541466</data>
+      <data key="v_lift">49.5360576923077</data>
+      <data key="v_count">289</data>
+    </node>
+    <node id="n13">
+      <data key="v_name">assoc5</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">5</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0134420342602028</data>
+      <data key="v_confidence">0.860248447204969</data>
+      <data key="v_coverage">0.0156257582374921</data>
+      <data key="v_lift">19.8734750577946</data>
+      <data key="v_count">277</data>
+    </node>
+    <edge source="n5" target="n9">
+    </edge>
+    <edge source="n5" target="n10">
+    </edge>
+    <edge source="n0" target="n11">
+    </edge>
+    <edge source="n8" target="n12">
+    </edge>
+    <edge source="n2" target="n13">
+    </edge>
+    <edge source="n3" target="n13">
+    </edge>
+    <edge source="n9" target="n4">
+    </edge>
+    <edge source="n10" target="n6">
+    </edge>
+    <edge source="n11" target="n1">
+    </edge>
+    <edge source="n12" target="n1">
+    </edge>
+    <edge source="n13" target="n7">
+    </edge>
+  </graph>
+</graphml>
