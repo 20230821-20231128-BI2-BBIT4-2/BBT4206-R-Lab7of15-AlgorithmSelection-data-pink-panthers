@@ -490,7 +490,7 @@ retail_removed_vars_obs$trans_time <-
   format(retail_removed_vars_obs$InvoiceDate, "%H:%M:%S")
 
 ## Record the InvoiceNo in the correct format (numeric) ----
-# Convert InvoiceNo into numeric
+# Convert InvoiceNo into numeric if it has a letter it is left as blank
 retail_removed_vars_obs$invoice_no <-
   as.numeric(as.character(retail_removed_vars_obs$InvoiceNo))
 
@@ -642,13 +642,13 @@ summary(tr_stock_code)
 
 # STEP 2. Basic EDA ----
 # Create an item frequency plot for the top 10 items
-itemFrequencyPlot(tr_stock_code, topN = 10, type = "absolute",
+itemFrequencyPlot(tr, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Absolute Item Frequency Plot",
                   horiz = TRUE,
                   mai = c(2, 2, 2, 2))
 
-itemFrequencyPlot(tr_stock_code, topN = 10, type = "relative",
+itemFrequencyPlot(tr, topN = 10, type = "relative",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Relative Item Frequency Plot",
                   horiz = TRUE,
