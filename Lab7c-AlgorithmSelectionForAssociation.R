@@ -370,19 +370,30 @@ if (require("RColorBrewer")) {
 # here: "data/transactions_single_format.csv" and loaded as follows:
 transactions_single_format <-
   read.transactions("data/transactions_single_format.csv",
-                    format = "single", cols = c(1, 2))
+                    format = "single", cols = c(1, 2),
+                    header = TRUE,
+                    rm.duplicates = TRUE,
+                    sep = ",")
 
 View(transactions_single_format)
 print(transactions_single_format)
+summary(transactions_single_format)
+inspect(transactions_single_format)
 
 ## FORMAT 2: Basket Format----
 # An example of the single format transaction data is presented
 # here: "data/transactions_basket_format.csv" and loaded as follows:
 transactions_basket_format <-
   read.transactions("data/transactions_basket_format.csv",
-                    format = "basket", sep = ",", cols = 2)
+                    format = "basket",
+                    header = TRUE,
+                    rm.duplicates = TRUE,
+                    sep = ",")
+
 View(transactions_basket_format)
 print(transactions_basket_format)
+summary(transactions_basket_format)
+inspect(transactions_basket_format)
 
 ## The online retail dataset ----
 # We will use the "Online Retail (2015)" dataset available on UCI ML repository
@@ -422,7 +433,7 @@ gg_miss_var(retail)
 gg_miss_upset(retail)
 
 #### OPTION 1: Remove the observations with missing values ----
-retail_removed_obs <- retail %>% filter(complete.cases(.))
+retail_removed_obs <- retail %>% dplyr::filter(complete.cases(.))
 
 # We end up with 406,829 observations to create the association rules
 # instead of the initial 541,909 observations.
@@ -498,7 +509,8 @@ dim(retail_removed_vars_obs)
 # We now remove the observations that do not have a numeric value for the
 # invoice_no variable, i.e., the cancelled invoices that did not lead to a
 # complete purchase. There are a total of 9,291 cancelled invoices.
-retail_removed_vars_obs <- retail_removed_vars_obs %>% filter(complete.cases(.))
+retail_removed_vars_obs <- retail_removed_vars_obs %>%
+  dplyr::filter(complete.cases(.))
 
 # This leads to the dataset now having 531,164 observations to use to create the
 # association rules.
@@ -523,6 +535,7 @@ write.csv(retail_removed_vars_obs,
 
 retail_removed_vars_obs <-
   read.csv(file = "data/retail_data_before_single_transaction_format.csv")
+
 
 ## Create a transaction data frame using the "basket format" ----
 str(retail_removed_vars_obs)
@@ -550,10 +563,10 @@ transaction_data <-
 transaction_data_stock_code <-
   plyr::ddply(retail_removed_vars_obs,
               c("invoice_no", "trans_date"),
-              function(df1) paste(df1$StockCode, collapse = ","))
+              function(df1) paste(df1$Description, collapse = ","))
 
 # The R function paste() concatenates vectors to characters and separates
-# the results using collapse = [any optional character string].
+# the results using `collapse = [any optional character string]`.
 # The separator we use in this case is a comma ",".
 View(transaction_data)
 
@@ -561,8 +574,8 @@ View(transaction_data)
 View(transaction_data_stock_code)
 
 ## Record only the `items` variable ----
-# Notice that at this point, the single format ensures that each transaction is
-# recorded in a single observation. We therefore no longer require the
+# Notice that at this point, the basket format ensures that each transaction is
+# recorded in one row. We therefore no longer require the
 # `invoice_no` variable and all the other variables in the data frame except
 # the itemsets.
 
@@ -570,7 +583,6 @@ View(transaction_data_stock_code)
 transaction_data <-
   transaction_data %>%
   dplyr::select("items" = V1)
-#  %>% mutate(items = paste("{", items, "}", sep = ""))
 
 View(transaction_data)
 
@@ -578,7 +590,6 @@ View(transaction_data)
 transaction_data_stock_code <-
   transaction_data_stock_code %>%
   dplyr::select("items" = V1)
-#  %>% mutate(items = paste("{", items, "}", sep = ""))
 
 View(transaction_data_stock_code)
 
@@ -604,6 +615,7 @@ tr <-
     rm.duplicates = TRUE,
     sep = ","
   )
+
 
 # This shows there are 20,607 transactions that have been identified
 # and 8,906 items
@@ -632,11 +644,11 @@ summary(tr_stock_code)
 
 # STEP 2. Basic EDA ----
 # Create an item frequency plot for the top 10 items
-itemFrequencyPlot(tr_stock_code, topN = 10, type = "absolute",
+itemFrequencyPlot(tr, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Absolute Item Frequency Plot",
                   horiz = TRUE,
-                  mai = c(2, 2, 2, 2))
+                  mai = c(1, 1, 1, 1))
 
 itemFrequencyPlot(tr_stock_code, topN = 10, type = "relative",
                   col = brewer.pal(8, "Pastel2"),
@@ -652,12 +664,11 @@ itemFrequencyPlot(tr_stock_code, topN = 10, type = "relative",
 # Stock Code "47566" corresponds to "PARTY BUNTING"
 # Stock Code "20725" corresponds to "LUNCH BAG RED RETROSPOT"
 
-
 # STEP 3. Create the association rules ----
 # We can set the minimum support and confidence levels for rules to be
 # generated.
 
-# The default behavior is to create rules with a minimum support of 0.1
+# The default action is to create rules with a minimum support of 0.1
 # and a minimum confidence of 0.8. These parameters can be adjusted (lowered)
 # if the algorithm does not lead to the creation of any rules.
 # We also set maxlen = 10 which refers to the maximum number of items per
@@ -748,7 +759,7 @@ inspect(head(strawberry_charlotte_bag_association_rules))
 rules_to_plot <-
   association_rules_prod_no_reps[quality(association_rules_prod_no_reps)$confidence > 0.85] # nolint
 
-#Plot SubRules
+#Plot SubRules.
 plot(rules_to_plot)
 plot(rules_to_plot, method = "two-key plot")
 
@@ -757,6 +768,13 @@ plot(top_10_rules_to_plot, method = "graph",  engine = "htmlwidget")
 
 saveAsGraph(head(rules_to_plot, n = 1000, by = "lift"),
             file = "graph/association_rules_prod_no_reps.graphml")
+
+## Tools to view .graphml Files ----
+# yEd Graph Editor: https://www.yworks.com/products/yed
+# Cytoscape: https://cytoscape.org/
+# Gephi: https://gephi.org/
+# Network Analysis Software: Pajek and NodeXL
+# Libraries in Python and R
 
 # Filter top 20 rules with highest lift
 rules_to_plot_by_lift <- head(rules_to_plot, n = 20, by = "lift")
@@ -778,7 +796,7 @@ plot(top_10_rules_to_plot, method = "grouped")
 # treatments. This information can be valuable for disease diagnosis and
 # treatment planning.
 
-# Recommendation Systems: Beyond retail, it's used in recommendation systems
+# Recommendation Systems: Beyond retail, it is used in recommendation systems
 # for movies, music, books, and more. It helps suggest items that users might
 # like based on their historical choices or preferences.
 
@@ -814,7 +832,7 @@ plot(top_10_rules_to_plot, method = "grouped")
 
 # These are just a few examples, and the creative applications of association
 # rule learning continue to expand as data mining and machine learning
-# techniques evolve. It's a versatile method for discovering patterns and
+# techniques evolve. It is a versatile method for discovering patterns and
 # associations in various types of data.
 
 # References ----
@@ -829,6 +847,8 @@ plot(top_10_rules_to_plot, method = "grouped")
 # association problem.
 # Each group member should provide one dataset that can be used for this
 # task as long as it is not one of the datasets we have used in Lab 7.
+# The aim is to help one another to train the model required for
+# the BI project.
 
 ## Part B ----
 # Upload *the link* to your
