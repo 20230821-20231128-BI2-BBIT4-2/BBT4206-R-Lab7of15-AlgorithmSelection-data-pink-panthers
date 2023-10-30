@@ -536,6 +536,7 @@ write.csv(retail_removed_vars_obs,
 retail_removed_vars_obs <-
   read.csv(file = "data/retail_data_before_single_transaction_format.csv")
 
+
 ## Create a transaction data frame using the "basket format" ----
 str(retail_removed_vars_obs)
 # To do this, we group the data by `invoice_no` and `trans_date`
@@ -562,7 +563,7 @@ transaction_data <-
 transaction_data_stock_code <-
   plyr::ddply(retail_removed_vars_obs,
               c("invoice_no", "trans_date"),
-              function(df1) paste(df1$StockCode, collapse = ","))
+              function(df1) paste(df1$Description, collapse = ","))
 
 # The R function paste() concatenates vectors to characters and separates
 # the results using `collapse = [any optional character string]`.
@@ -615,6 +616,7 @@ tr <-
     sep = ","
   )
 
+
 # This shows there are 20,607 transactions that have been identified
 # and 8,906 items
 print(tr)
@@ -646,7 +648,7 @@ itemFrequencyPlot(tr, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Absolute Item Frequency Plot",
                   horiz = TRUE,
-                  mai = c(2, 2, 2, 2))
+                  mai = c(1, 1, 1, 1))
 
 itemFrequencyPlot(tr, topN = 10, type = "relative",
                   col = brewer.pal(8, "Pastel2"),
@@ -757,7 +759,7 @@ inspect(head(strawberry_charlotte_bag_association_rules))
 rules_to_plot <-
   association_rules_prod_no_reps[quality(association_rules_prod_no_reps)$confidence > 0.85] # nolint
 
-#Plot SubRules
+#Plot SubRules.
 plot(rules_to_plot)
 plot(rules_to_plot, method = "two-key plot")
 
