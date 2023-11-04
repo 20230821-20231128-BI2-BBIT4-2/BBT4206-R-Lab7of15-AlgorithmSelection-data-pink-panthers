@@ -1,0 +1,383 @@
+---
+title: "Business Intelligence Lab Submission Markdown"
+author: "Data Pink Pathers"
+date: "04-11-2023"
+output:
+  github_document: 
+    toc: yes
+    toc_depth: 4
+    fig_width: 6
+    fig_height: 4
+    df_print: default
+editor_options:
+  chunk_output_type: console
+---
+
+# Student Details {#student-details}
+
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+| **Student ID Numbers and Names of Group Members** | \| 1. 137315 - C - Yashvi Bhadania             |                    |            |
+|                                                   |                                                |                    |            |
+|                                                   | \| 2. 134668 - C - June Ndinda Mutiso          |                    |            |
+|                                                   |                                                |                    |            |
+|                                                   | \| 3. 135227 - C - Inncent Mbuvi               |                    |            |
+|                                                   |                                                |                    |            |
+|                                                   | \| 4. 134253 - C - Uzair Farooq                |                    |            |
+|                                                   |                                                |                    |            |
+|                                                   | \| 5. 135109 - C - Jackson Kaburu              |                    |            |
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+|                                                   | **GitHub Classroom Group Name**                | Data Pink Panthers |            |
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+| **Course Code**                                   | BBT4206                                        |                    |            |
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+| **Course Name**                                   | Business Intelligence II                       |                    |            |
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+| **Program**                                       | Bachelor of Business Information Technology    |                    |            |
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+| **Semester Duration**                             | 16^th^ October 2023 to 28^th^ November 2023 \| |                    |            |
++---------------------------------------------------+------------------------------------------------+--------------------+------------+
+
+# Step 1: Setup Chunk {#setup-chunk}
+
+We start by installing all the required packages
+
+``` r
+if (require("languageserver")) {
+  require("languageserver")
+} else {
+  install.packages("languageserver", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+# STEP 1. Install and Load the Required Packages ----
+## readr ----
+if (require("readr")) {
+  require("readr")
+} else {
+  install.packages("readr", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## naniar ----
+if (require("naniar")) {
+  require("naniar")
+} else {
+  install.packages("naniar", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## ggplot2 ----
+if (require("ggplot2")) {
+  require("ggplot2")
+} else {
+  install.packages("ggplot2", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## corrplot ----
+if (require("corrplot")) {
+  require("corrplot")
+} else {
+  install.packages("corrplot", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## ggcorrplot ----
+if (require("ggcorrplot")) {
+  require("ggcorrplot")
+} else {
+  install.packages("ggcorrplot", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+```
+
+------------------------------------------------------------------------
+
+**Note:** the following "*KnitR*" options have been set as the defaults in this markdown:\
+`knitr::opts_chunk$set(echo = TRUE, warning = FALSE, eval = TRUE, collapse = FALSE, tidy.opts = list(width.cutoff = 80), tidy = TRUE)`.
+
+More KnitR options are documented here <https://bookdown.org/yihui/rmarkdown-cookbook/chunk-options.html> and here <https://yihui.org/knitr/options/>.
+
+``` r
+knitr::opts_chunk$set(
+    eval = TRUE,
+    echo = TRUE,
+    warning = FALSE,
+    collapse = FALSE,
+    tidy = TRUE
+)
+```
+
+------------------------------------------------------------------------
+
+**Note:** the following "*R Markdown*" options have been set as the defaults in this markdown:
+
+> output:
+>
+> github_document:\
+> toc: yes\
+> toc_depth: 4\
+> fig_width: 6\
+> fig_height: 4\
+> df_print: default
+>
+> editor_options:\
+> chunk_output_type: console
+
+# STEP 2 Loading the Dataset {#loading-the-dataset}
+
+``` r
+# STEP 2. Load the Dataset ----
+# Source: https://www.kaggle.com/datasets/arjunbhasin2013/ccdata
+# Save the dataset as "credit_card.csv" inside the data folder
+
+credit_card <- read_csv("data/CC GENERAL.csv")
+dim(credit_card)
+
+View(credit_card)
+print(credit_card)
+summary(credit_card)
+```
+
+# STEP 3. Check for missing data and address it
+
+``` r
+
+# STEP 3. Check for Missing Data and Address it ----
+
+# Are there missing values 
+any_na(credit_card)
+# How many?
+n_miss(credit_card)
+# What is the proportion
+prop_miss(credit_card)
+# What is the number and percentage of missing values grouped by variable?
+miss_var_summary(credit_card)
+# Which variables contain the most missing values?
+gg_miss_var(credit_card)
+# Which combinations of variables are missing together?
+gg_miss_upset(credit_card)
+# Where are missing values located (the shaded regions in the plot)?
+vis_miss(credit_card) +
+  theme(axis.text.x = element_text(angle = 80))
+
+
+## OPTION 1: Remove the observations with missing values ----
+# We can decide to remove all the observations that have missing values
+credit_card_removed_obs <-
+  credit_card %>%
+  dplyr::filter(complete.cases(.))
+
+# The initial dataset had 8950 observations and 18 variables
+dim(credit_card)
+dim(credit_card_removed_obs)
+
+
+# Are there missing values in the dataset?
+any_na(credit_card_removed_obs)
+
+
+## OPTION 2: Remove the variables with missing values ----
+# Alternatively, we can decide to remove the 2 variables that have missing data
+credit_card_removed_vars <-
+  credit_card %>%
+  dplyr::select(-MINIMUM_PAYMENTS, -CREDIT_LIMIT)
+
+# The initial dataset had 21,120 observations and 16 variables
+dim(credit_card)
+
+# The filtered dataset has 21,120 observations and 14 variables
+dim(credit_card_removed_vars)
+
+# Are there missing values in the dataset?
+any_na(credit_card_removed_vars)
+```
+
+# STEP 4. EDA and Feature Selection ----
+
+``` r
+
+# STEP 4. Perform EDA and Feature Selection ----
+## Compute the correlations between variables ----
+# We identify the correlated variables because it is these correlated variables
+# that can then be used to identify the clusters.
+
+# Create a correlation matrix
+# Option 1: Basic Table
+cor(credit_card_removed_obs[, c(3, 6, 7, 9, 10, 11, 13, 14, 15, 16)]) %>%
+  View()
+
+# Option 2: Basic Plot
+install.packages("corrplot")
+library(corrplot)
+
+cor(credit_card_removed_obs[, c(3, 6, 7, 9, 10, 11, 13, 14, 15, 16)]) %>%
+  corrplot(method = "square")
+
+# Option 3: Fancy Plot using ggplot2
+install.packages("ggcorrplot")
+library(ggcorrplot)
+
+
+corr_matrix <- cor(credit_card_removed_obs[, c(3, 6, 7, 9, 10, 11, 13, 14,
+                                               15, 16)])
+
+p <- ggplot2::ggplot(data = reshape2::melt(corr_matrix),
+                     ggplot2::aes(Var1, Var2, fill = value)) +
+  ggplot2::geom_tile() +
+  ggplot2::geom_text(ggplot2::aes(label = label_wrap(label, width = 10)),
+                     size = 4) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = TRUE)
+
+# the correlation plot shows strong correlations a correlation of -0.18 cash advance and purchases installments frequency
+
+#SCATTER plot to investigate correlation btwn cash advance and credit limit 
+#this combination gives a corr score of 0.3
+ggplot(credit_card_removed_obs,
+       aes(CASH_ADVANCE, CREDIT_LIMIT,
+           color = CREDIT_LIMIT)) +
+  geom_point(alpha = 0.5) +
+  xlab("CREDIT_LIMIT") +
+  ylab("CASH_ADVANCE")
+
+# Investigate correlation between Payments and Credit limit 
+ggplot(credit_card_removed_obs,
+       aes(PAYMENTS, CREDIT_LIMIT,
+           color = CREDIT_LIMIT, 
+       )) +
+  geom_point(alpha = 0.5) +
+  xlab("PAYMENTS") +
+  ylab("CREDIT_LIMIT")
+
+#SCATTER plot to investigate correlation btwn installments purchases and Cash advance
+# a combined score of -0.07
+
+ggplot(credit_card_removed_obs,
+       aes(INSTALLMENTS_PURCHASES, CASH_ADVANCE,
+           color = PURCHASES_TRX)) +
+  geom_point(alpha = 0.5) +
+  xlab("INSTALLMENTS_PURCHASES") +
+  ylab("CASH_ADVANCE")
+
+#SCATTER plot to investigate correlation btwn cash advance frequency and purchases installments frequency
+# this combination gives a score of -0.18
+ggplot(credit_card_removed_obs,
+       aes(CASH_ADVANCE_FREQUENCY, PURCHASES_INSTALLMENTS_FREQUENCY,
+           color = CASH_ADVANCE_FREQUENCY)) +
+  geom_point(alpha = 0.5) +
+  xlab("Cash advance Frequency ") +
+  ylab("purchases installments frequency")
+
+## Transform the data ----
+## caret ----
+if (require("caret")) {
+  require("caret")
+} else {
+  install.packages("caret", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## dplyr ----
+if (require("dplyr")) {
+  require("dplyr")
+} else {
+  install.packages("dplyr", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+# The K Means Clustering algorithm performs better when data transformation has
+# been applied. This helps to standardize the data making it easier to compare
+# multiple variables.
+
+summary(credit_card_removed_obs)
+model_of_the_cc_transform <- preProcess(credit_card_removed_obs,
+                                        method = c("scale", "center"))
+print(model_of_the_cc_transform)
+
+credit_card_removed_obs_std <- predict(model_of_the_cc_transform, # nolint
+                                       credit_card_removed_obs)
+summary(credit_card_removed_obs_std)
+sapply(credit_card_removed_obs_std[, c(3, 6, 7, 9, 10, 11, 13, 14,
+                                       15, 16)], sd)
+
+
+## Select the features to use to create the clusters ----
+# OPTION 1: Use all the numeric variables to create the clusters
+str(credit_card_removed_obs_std)
+
+credit_card_vars <-
+  credit_card_removed_obs_std[, c(2, 3, 4, 5,  6, 7, 8, 9, 10, 11, 12, 13, 14,
+                                  15, 16, 17, 18)]
+
+# OPTION 2: Use only the most significant variables to create the clusters
+# This can be informed by feature selection, or by the business case.
+credit_card_vars <-
+  credit_card_removed_obs_std[, c("CREDIT_LIMIT",
+                                  "PAYMENTS")]
+```
+
+# STEP 5 Creating the clusters using K-means 
+
+``` r
+
+# STEP 5. Create the clusters using the K-Means Clustering Algorithm ----
+# We start with a random guess of the number of clusters we need
+set.seed(7)
+kmeans_cluster <- kmeans(credit_card_vars, centers = 2, nstart = 20)
+
+# We then decide the maximum number of clusters to investigate
+n_clusters <- 8
+
+# Initialize total within sum of squares error: wss
+wss <- numeric(n_clusters)
+set.seed(7)
+for (i in 1:n_clusters) {
+  # Use the K Means cluster algorithm to create each cluster
+  kmeans_cluster <- kmeans(credit_card_vars, centers = i, nstart = 20)
+  # Save the within cluster sum of squares
+  wss[i] <- kmeans_cluster$tot.withinss
+}
+
+## Plot a scree plot ----
+# The scree plot should help you to note when additional clusters do not make
+# any significant difference (the plateau).
+wss_df <- tibble(clusters = 1:n_clusters, wss = wss)
+
+scree_plot <- ggplot(wss_df, aes(x = clusters, y = wss, group = 1)) +
+  geom_point(size = 4) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2, 4, 6, 8)) +
+  xlab("Number of Clusters")
+
+scree_plot
+
+# We can add guides to make it easier to identify the plateau (or "elbow").
+scree_plot +
+  geom_hline(
+    yintercept = wss,
+    linetype = "dashed",
+    col = c(rep("#000000", 5), "#FF0000", rep("#000000", 2))
+  )
+
+# The plateau is reached at 6 clusters.
+# We therefore create the final cluster with 6 clusters
+# (not the initial 3 used at the beginning of this STEP.)
+k <- 6
+set.seed(7)
+# Build model with k clusters: kmeans_cluster
+kmeans_cluster <- kmeans(credit_card_vars, centers = k, nstart = 20)
+
+# STEP 6. Add the cluster number as a label for each observation ----
+credit_card_removed_obs$cluster_id <- factor(kmeans_cluster$cluster)
+
+#plotting with the 2 significant featured 
+ggplot(credit_card_removed_obs, aes(PAYMENTS, CREDIT_LIMIT,
+                                    color = cluster_id)) +
+  geom_point(alpha = 0.5) +
+  xlab("PAYMENYS") +
+  ylab("CREDIT_LIMIT")
+```
+
+**etc.** as per the lab submission requirements. Be neat and communicate in a clear and logical manner.
